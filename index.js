@@ -10,25 +10,66 @@ const app = express();
 
 const port = 5001;
 
+  // Création d'une API
+
+  const movies = [
+    {
+      id: 1,
+      title: "Citizen Kane",
+      director: "Orson Wells",
+      year: "1941",
+      color: false,
+      duration: 120,
+    },
+    {
+      id: 2,
+      title: "The Godfather",
+      director: "Francis Ford Coppola",
+      year: "1972",
+      color: true,
+      duration: 180,
+    },
+    {
+      id: 3,
+      title: "Pulp Fiction",
+      director: "Quentin Tarantino",
+      year: "1994",
+      color: true,
+      duration: 180,
+    },
+  ];
+
 // Création des routes
 
-    // Route "/""
+    // Route "/"
 
     app.get("/", (req, res) => {
-    res.send("Welcome to Express");
+    res.send("Welcome to my favourite movie list");
     });
 
-    // Route "/search"
+    // Route "/api/movies"
 
-    const handler = (req, res) => {};
-    app.get("/search", handler);
-
-    // Route "users/name"
-
-    const welcomeName = (req, res) => {
-        res.send(`Welcome ${req.params.name}`);
+    const getMovies = (req, res) => {
+        res.status(200).json(movies);
     };
-    app.get("/users/:name", welcomeName);
+    
+    app.get("/api/movies", getMovies);
+
+    // Route "/api/movies/:id"
+
+    const getMoviesById = (req, res) => {
+        const movieId = parseInt(req.params.id, 10);
+        const movie = movies.find(m => m.id === movieId);
+    
+        if (movie) {
+            res.status(200).json(movie);
+        } else {
+            res.status(404).send("Not Found");
+        }
+    };
+    
+    app.get("/api/movies/:id", getMoviesById);
+
 
 // Ecoute des connexions entrantes en utilisant app.listen
 
@@ -39,26 +80,3 @@ app
   .on("error", (err) => {
     console.error("Error:", err.message);
   });
-
-  // Création d'une API
-
-    const cocktails = [
-        {
-        id: 1,
-        name: "Margarita",
-        },
-        {
-        id: 2,
-        name: "Mojito",
-        },
-        {
-        id: 3,
-        name: "Cuba Libre",
-        },
-    ];
-    
-    const getCocktails = (req, res) => {
-        res.status(200).json(cocktails);
-    };
-    
-    app.get("/api/cocktails", getCocktails);
